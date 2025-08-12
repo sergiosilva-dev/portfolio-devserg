@@ -6,7 +6,7 @@
 
 const Footer = () => {
   return (
-    <footer className="bg-zinc-100 dark:bg-zinc-900 text-center py-6 mt-12 text-sm text-zinc-600 dark:text-zinc-400">
+    <footer className="bg-zinc-100 dark:bg-zinc-900 text-center py-6 text-sm text-zinc-600 dark:text-zinc-400 border-t border-zinc-200 dark:border-zinc-800">
       © {new Date().getFullYear()} Sergio Silva. Todos los derechos reservados.
     </footer>
   );
