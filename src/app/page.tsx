@@ -1,10 +1,11 @@
 import HeroSection from "@/components/HeroSection";
+import SeoJsonLd from "@/components/SeoJsonLd";
 
 export default function HomePage() {
   return (
     <>
       <HeroSection />
-      {/* Aquí irán otras secciones como Sobre mí, Proyectos, etc. */}
+      <SeoJsonLd />
     </>
   );
 }
