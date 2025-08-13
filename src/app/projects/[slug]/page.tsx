@@ -5,19 +5,27 @@ import Section from "@/components/ui/Section";
 import PageTitle from "@/components/ui/PageTitle";
 import { projects } from "@/data/projects";
 
-type Params = { params: { slug: string } };
+// Tipado para Next 15: params es un Promise
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
 
 export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: Params) {
-  const p = projects.find((x) => x.slug === params.slug);
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params;
+  const p = projects.find((x) => x.slug === slug);
   return { title: p ? `${p.title} | Proyectos` : "Proyecto" };
 }
 
-export default function ProjectDetail({ params }: Params) {
-  const p = projects.find((x) => x.slug === params.slug);
+// (opcional) ISR
+export const revalidate = 60;
+
+export default async function ProjectDetail({ params }: PageProps) {
+  const { slug } = await params;
+  const p = projects.find((x) => x.slug === slug);
   if (!p) return notFound();
 
   return (
