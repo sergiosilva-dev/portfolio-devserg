@@ -3,36 +3,43 @@
 // Description: Componente de navegación principal del sitio
 
 "use client";
-
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-const Navbar = () => {
+const links = [
+  { href: "/", label: "Inicio" },
+  { href: "/about", label: "Sobre mí" },
+  { href: "/projects", label: "Proyectos" },
+  { href: "/blog", label: "Blog" },
+  { href: "/skills", label: "Skills" },
+  { href: "/contact", label: "Contacto" },
+];
+
+export default function Navbar() {
+  const pathname = usePathname();
   return (
-    <header className="w-full bg-white dark:bg-zinc-950 shadow-md sticky top-0 z-50">
-      <nav className="flex items-center justify-between px-4 sm:px-8 py-4 max-w-7xl mx-auto">
-        <Link
-          href="/"
-          className="text-2xl font-bold text-blue-600 dark:text-blue-400"
-        >
+    <nav className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-black/40">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
+        <Link href="/" className="font-semibold">
           Sergio.dev
         </Link>
-        <div className="space-x-4">
-          <Link href="#sobre-mi" className="hover:underline">
-            Sobre mí
-          </Link>
-          <Link href="#proyectos" className="hover:underline">
-            Proyectos
-          </Link>
-          <Link href="#skills" className="hover:underline">
-            Skills
-          </Link>
-          <Link href="#contacto" className="hover:underline">
-            Contacto
-          </Link>
+        <div className="hidden md:flex gap-4">
+          {links.map((l) => {
+            const active = pathname === l.href;
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                className={`px-2 py-1 rounded-md text-sm ${
+                  active ? "bg-white/10" : "hover:bg-white/5"
+                }`}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
         </div>
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
-};
-
-export default Navbar;
+}

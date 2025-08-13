@@ -1,52 +1,56 @@
 // src/components/common/ParticlesBackground.tsx
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
-import { loadBasic } from "@tsparticles/basic";
+import { loadSlim } from "@tsparticles/slim";
 import type { ISourceOptions } from "@tsparticles/engine";
 
-export default function ParticlesBackground() {
+type Props = { className?: string; ariaHidden?: boolean };
+
+export default function ParticlesBackground({
+  className = "",
+  ariaHidden,
+}: Props) {
+  const [ready, setReady] = useState(false);
+
+  // Inicializa el engine UNA sola vez
   useEffect(() => {
     initParticlesEngine(async (engine) => {
-      await loadBasic(engine);
-    });
+      await loadSlim(engine);
+    }).then(() => setReady(true));
   }, []);
 
+  // Opciones tipadas (puedes quitar ISourceOptions si no quieres importar tipos)
   const options: ISourceOptions = useMemo(
     () => ({
-      fullScreen: { enable: false },
-
-      background: { color: { value: "#0d1117" } },
-      fpsLimit: 60,
-      particles: {
-        color: { value: "#ffffff" },
-        links: {
-          enable: true,
-          distance: 150,
-          color: "#ffffff",
-          opacity: 0.5,
-          width: 1,
-        },
-        move: {
-          enable: true,
-          speed: 2,
-          direction: "none",
-          outModes: { default: "bounce" },
-        },
-        number: { value: 60, density: { enable: true } },
-        opacity: { value: 0.5 },
-        shape: { type: "circle" },
-        size: { value: { min: 1, max: 5 } },
-      },
-      interactivity: {
-        events: { onHover: { enable: true, mode: "repulse" } },
-        modes: { repulse: { distance: 100, duration: 0.4 } },
-      },
       detectRetina: true,
+      fpsLimit: 60,
+      fullScreen: { enable: false },
+      background: { color: { value: "transparent" } },
+      particles: {
+        number: {
+          value: 40,
+          density: { enable: true, width: 1920, height: 1080 }, // reemplaza area por width/height
+        },
+        color: { value: "#9aa0a6" },
+        opacity: { value: 0.5 },
+        size: { value: { min: 1, max: 3 } },
+        move: { enable: true, speed: 0.6 },
+      },
     }),
     []
   );
 
-  return <Particles id="tsparticles" options={options} />;
+  return (
+    <div className={className} aria-hidden={ariaHidden ? "true" : undefined}>
+      {ready && (
+        <Particles
+          id="tsparticles"
+          options={options}
+          className="w-full h-full"
+        />
+      )}
+    </div>
+  );
 }
