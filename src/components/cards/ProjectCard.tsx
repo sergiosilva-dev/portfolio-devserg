@@ -2,14 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { Project } from "@/types/project";
 
-export default function ProjectCard({ project }: { project: Project }) {
+export default function ProjectCard({ project, priority = false, }: { project: Project ; priority?: boolean; }) {
   return (
     <article className="group rounded-2xl border border-white/10 bg-white/5 hover:bg-white/[0.07] transition p-4 sm:p-5 flex flex-col">
       <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl">
         <Image
-          src={project.thumbnail || "/assets/placeholders/project.webp"}
+          src={project.thumbnail || "/assets/placeholders/project-placeholder.webp"}
           alt={project.title}
           fill
+          priority={priority}
           className="object-cover transition-transform group-hover:scale-[1.02]"
           sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw"
         />

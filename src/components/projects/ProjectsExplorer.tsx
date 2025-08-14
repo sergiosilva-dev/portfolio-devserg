@@ -81,8 +81,8 @@ export default function ProjectsExplorer({
 
       {/* Grid */}
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map((p) => (
-          <ProjectCard key={p.id} project={p} />
+        {filtered.map((p, i) => (
+          <ProjectCard key={p.id} project={p} priority={i === 0} />
         ))}
       </div>
     </div>

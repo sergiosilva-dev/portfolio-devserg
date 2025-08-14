@@ -1,11 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import fs from "node:fs";
+import path from "node:path";
+
 import Section from "@/components/ui/Section";
 import PageTitle from "@/components/ui/PageTitle";
 import { projects } from "@/data/projects";
 
-// Tipado para Next 15: params es un Promise
+// Next 15: params es un Promise
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
@@ -14,10 +18,29 @@ export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const p = projects.find((x) => x.slug === slug);
-  return { title: p ? `${p.title} | Proyectos` : "Proyecto" };
+
+  // OG por proyecto si existe: /public/og/projects/<slug>.jpg
+  const candidateFs = path.join(
+    process.cwd(),
+    "public",
+    "og",
+    "projects",
+    `${slug}.jpg`
+  );
+  const ogImage = fs.existsSync(candidateFs)
+    ? `/og/projects/${slug}.jpg`
+    : "/og/default.jpg"; // asegúrate de tener este archivo
+
+  return {
+    title: p ? `${p.title} | Proyectos` : "Proyecto",
+    openGraph: { images: [ogImage] },
+    twitter: { images: [ogImage] },
+  };
 }
 
 // (opcional) ISR
@@ -35,11 +58,12 @@ export default async function ProjectDetail({ params }: PageProps) {
 
       <div className="mt-6 relative aspect-[16/9] w-full overflow-hidden rounded-xl">
         <Image
-          src={p.thumbnail || "/assets/placeholders/project.webp"}
+          src={p.thumbnail ?? "/assets/placeholders/project-placeholder.webp"}
           alt={p.title}
           fill
           className="object-cover"
           sizes="100vw"
+          priority
         />
       </div>
 

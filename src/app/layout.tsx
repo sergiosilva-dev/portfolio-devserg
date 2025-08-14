@@ -1,11 +1,12 @@
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Layout from "@/components/layout/Layout";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://portfolio-devserg.vercel.app";
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://portfolio-devserg.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
     title: "Sergio Silva",
     description:
       "Desarrollador Web y Frontend Developer. Portafolio y blog con tecnologías modernas 2025.",
-    images: ["/og.jpg"],
+    images: ["/og/default.jpg"],
     locale: "es_CO",
   },
   twitter: {
@@ -34,12 +35,23 @@ export const metadata: Metadata = {
     title: "Sergio Silva",
     description:
       "Desarrollador Web y Frontend Developer. Portafolio y blog con tecnologías modernas 2025.",
-    images: ["/og.jpg"],
+    images: ["/og/default.jpg"],
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico" }, // clásico
+      { url: "/icons/icon-192.png", sizes: "192x192" },
+      { url: "/icons/icon-512.png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/icons/apple-touch-icon.png", sizes: "180x180" }],
   },
-  themeColor: "#0b0f14",
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0f14" },
+  ],
 };
 
 export default function RootLayout({
@@ -48,7 +60,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="scroll-smooth">
+    <html lang="es" className="scroll-smooth" data-scroll-behavior="smooth">
       <body className={inter.className}>
         <Layout>{children}</Layout>
       </body>

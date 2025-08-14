@@ -23,7 +23,7 @@ export default function HeroSection() {
             {/* Avatar */}
             <div className="mx-auto mb-6 sm:mb-8 w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-full ring-2 ring-white/10 shadow-md overflow-hidden">
               <Image
-                src="/images/sergio.jpg"
+                src="/images/avatar/sergio.jpg"
                 alt="Foto de Sergio Silva"
                 width={256}
                 height={256}
